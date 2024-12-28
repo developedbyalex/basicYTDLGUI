@@ -26,7 +26,7 @@
 
 2. Install dependencies:
    ```bash
-   npm install
+   npm i
    ```
 
 3. Run the server:
@@ -69,11 +69,7 @@ project-folder/
 
 - If `yt-dlp` is not recognized, ensure it is installed and added to your system's PATH.
 - Check the console for detailed error messages in case of issues during the download process.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
+- 
 ---
 
 ### Contributing
