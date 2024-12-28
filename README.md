@@ -21,7 +21,7 @@
 1. Clone this repository:
    ```bash
    git clone https://github.com/https://github.com/developedbyalex/basicYTDLGUI.git
-   cd media-downloader
+   cd basicYTDLGUI
    ```
 
 2. Install dependencies:
