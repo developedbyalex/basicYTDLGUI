@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/dabb9495-431b-46c5-8bb1-c914668dbfd1)
+
 # basicYTDLGUI
 
 **basicYTDLGUI** is a lightweight and user-friendly web application for downloading videos and audio files from various online platforms. It supports downloading in both MP4 (video) and MP3 (audio) formats.
