@@ -20,7 +20,7 @@
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/https://github.com/developedbyalex/basicYTDLGUI.git
+   git clone https://github.com/developedbyalex/basicYTDLGUI.git
    cd basicYTDLGUI
    ```
 
