@@ -58,7 +58,16 @@ project-folder/
 ├── package.json           # Project dependencies
 └── README.md              # Project documentation
 ```
+---
+## Instagram Support
 
+To download from Instagram, you'll need to provide authentication:
+
+1. Install a browser extension like "[Get cookies.txt](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc?hl=en)"
+2. Log into Instagram in your browser
+3. Use the extension to export your cookies
+4. Save the exported file as `cookies.txt` in the project root directory
+---
 ## Technology Stack
 
 - **Frontend**: HTML5, CSS3, JavaScript (Vanilla JS)
