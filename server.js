@@ -10,23 +10,24 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
 app.post("/download", (req, res) => {
-    const { url, format } = req.body;
+    const videoUrl = req.body.url;
 
-    if (!url) {
+    if (!videoUrl) {
         return res.status(400).json({ error: "No URL provided" });
     }
 
-    const uniqueFilename = `media_${Date.now()}.${format}`;
+    const uniqueFilename = `video_${Date.now()}.mp4`;
     const outputPath = path.join(__dirname, uniqueFilename);
+    const cookiesPath = path.join(__dirname, 'cookies.txt');
 
-    const formatFlag = format === 'mp3' ? '-x --audio-format mp3' : '-f mp4';
-    
     const ytDlp = spawn('yt-dlp', [
         '-o', outputPath,
-        ...formatFlag.split(' '),
+        '-f', 'mp4',
         '--newline',
         '--progress',
-        url
+        '--cookies', cookiesPath,
+        '--no-warnings',
+        videoUrl
     ]);
 
     ytDlp.stdout.on('data', (data) => {
@@ -39,7 +40,8 @@ app.post("/download", (req, res) => {
     });
 
     ytDlp.stderr.on('data', (data) => {
-        console.error(`Error: ${data}`);
+        console.error(`stderr: ${data}`);
+        res.write(JSON.stringify({ error: data.toString() }));
     });
 
     ytDlp.on('close', (code) => {
@@ -56,7 +58,6 @@ app.post("/download", (req, res) => {
     });
 
     ytDlp.on('error', (error) => {
-        console.error(`Failed to start process: ${error}`);
         res.write(JSON.stringify({ error: error.message }));
         res.end();
     });
@@ -64,31 +65,11 @@ app.post("/download", (req, res) => {
 
 app.get("/download/:filename", (req, res) => {
     const filePath = path.join(__dirname, req.params.filename);
-    
-    // Check if file exists
-    if (!fs.existsSync(filePath)) {
-        return res.status(404).send("File not found");
-    }
-
     res.download(filePath, (err) => {
-        if (err) {
-            console.error(`Download error: ${err}`);
-            return res.status(500).send("Error downloading file");
+        if (!err) {
+            fs.unlinkSync(filePath);
         }
-
-        // Clean up file after successful download
-        fs.unlink(filePath, (unlinkErr) => {
-            if (unlinkErr) {
-                console.error(`Error deleting file: ${unlinkErr}`);
-            }
-        });
     });
-});
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
 });
 
 app.listen(PORT, () => {
