@@ -11,7 +11,8 @@ document.getElementById("download-form").addEventListener("submit", async (e) =>
         useDefaultName: document.getElementById("use-default-name").checked,
         includeMetadata: document.getElementById("include-metadata").checked,
         includeComments: document.getElementById("include-comments").checked,
-        customName: document.getElementById("custom-name").value
+        customName: document.getElementById("custom-name").value,
+        format: document.getElementById("format-select").value
     };
 
     const statusMessage = document.getElementById("status-message");

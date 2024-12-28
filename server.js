@@ -10,7 +10,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
 app.post("/download", (req, res) => {
-    const { url: videoUrl, useDefaultName, includeMetadata, includeComments, customName } = req.body;
+    const { url: videoUrl, useDefaultName, includeMetadata, includeComments, customName, format } = req.body;
 
     if (!videoUrl) {
         return res.status(400).json({ error: "No URL provided" });
@@ -22,10 +22,25 @@ app.post("/download", (req, res) => {
         fs.mkdirSync(downloadsDir);
     }
 
-    // Base arguments for best video+audio quality
+    // Set format-specific arguments
+    let formatArgs;
+    if (format === 'mp3') {
+        formatArgs = [
+            '-f', 'bestaudio',
+            '-x',  // Extract audio
+            '--audio-format', 'mp3',
+            '--audio-quality', '0'  // Best quality
+        ];
+    } else {
+        formatArgs = [
+            '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+            '--merge-output-format', 'mp4'
+        ];
+    }
+
+    // Combine all arguments
     const args = [
-        '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
-        '--merge-output-format', 'mp4',
+        ...formatArgs,
         '--newline',
         '--progress'
     ];
@@ -58,7 +73,8 @@ app.post("/download", (req, res) => {
         outputFileName = '%(title)s.%(ext)s';
         outputPath = path.join(downloadsDir, outputFileName);
     } else {
-        outputFileName = customName ? `${customName}.mp4` : `video_${Date.now()}.mp4`;
+        const extension = format === 'mp3' ? 'mp3' : 'mp4';
+        outputFileName = customName ? `${customName}.${extension}` : `video_${Date.now()}.${extension}`;
         outputPath = path.join(downloadsDir, outputFileName);
     }
 
