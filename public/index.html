@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Downloader</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <i class="fas fa-cloud-download-alt"></i>
+            <h1>Media Downloader</h1>
+        </div>
+        <form id="download-form" aria-label="Media download form">
+            <div class="input-container">
+                <i class="fas fa-link"></i>
+                <input 
+                    type="url" 
+                    id="video-url" 
+                    placeholder="Paste your URL here" 
+                    required 
+                    aria-label="URL input"
+                />
+            </div>
+            <div class="button-group">
+                <button type="button" class="download-btn" data-format="mp4" aria-label="Download MP4">
+                    <i class="fas fa-video"></i>
+                    Download MP4
+                </button>
+                <button type="button" class="download-btn" data-format="mp3" aria-label="Download MP3">
+                    <i class="fas fa-music"></i>
+                    Download MP3
+                </button>
+            </div>
+        </form>
+        <div class="progress-container" style="display: none;">
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-text">0%</div>
+        </div>
+        <p id="status-message" aria-live="polite"></p>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
