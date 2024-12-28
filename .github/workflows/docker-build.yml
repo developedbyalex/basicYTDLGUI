@@ -1,0 +1,24 @@
+name: Docker Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build Docker image
+      run: docker build . --file Dockerfile --tag video-downloader:$(date +%s)
+      
+    - name: Test Docker image
+      run: |
+        docker-compose up -d
+        sleep 10
+        curl http://localhost:3000 || exit 1
+        docker-compose down
