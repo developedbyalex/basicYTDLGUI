@@ -84,3 +84,7 @@ To download from Instagram, you'll need to provide authentication:
 ### Contributing
 
 Contributions are welcome! Feel free to fork this project, improve it, and submit a pull request.
+
+## Please note
+
+This project is meant to be hosted locally, this is not for production use at all.
