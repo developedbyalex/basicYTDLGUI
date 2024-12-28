@@ -75,11 +75,11 @@ To download from Instagram, you'll need to provide authentication:
 - **Frontend**: HTML5, CSS3, JavaScript (Vanilla JS)
 - **Backend**: Node.js, Express.js
 - **Download Tool**: yt-dlp
+---
+### To-Do List
 
-## Todo
-
-[ ] Get docker working
-[ ] Mass link downloader
+- [ ] Get Docker working
+- [ ] Add option to download multiple links at once
 ---
 
 ### Contributing
