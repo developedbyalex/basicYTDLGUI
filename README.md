@@ -76,11 +76,10 @@ To download from Instagram, you'll need to provide authentication:
 - **Backend**: Node.js, Express.js
 - **Download Tool**: yt-dlp
 
-## Troubleshooting
+## Todo
 
-- If `yt-dlp` is not recognized, ensure it is installed and added to your system's PATH.
-- Check the console for detailed error messages in case of issues during the download process.
-- 
+[ ] Get docker working
+[ ] Mass link downloader
 ---
 
 ### Contributing
