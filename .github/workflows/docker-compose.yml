@@ -1,0 +1,36 @@
+name: Docker Compose CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Setup Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose-plugin
+
+      - name: Build and start containers
+        run: docker compose up -d --build
+
+      - name: Wait for application to start
+        run: sleep 10
+
+      - name: Test the application
+        run: |
+          curl http://localhost:3000 || exit 1
+
+      - name: Stop containers
+        if: always()
+        run: docker compose down
