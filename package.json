@@ -4,7 +4,13 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "docker:build": "docker build -t localtydlp .",
+    "docker:run": "docker run -p 3000:3000 -v $(pwd)/downloads:/usr/src/app/downloads localtydlp",
+    "docker:compose": "docker-compose up",
+    "docker:compose:build": "docker-compose up --build",
+    "docker:compose:down": "docker-compose down",
+    "docker:clean": "docker system prune -f"
   },
   "keywords": [],
   "author": "",
