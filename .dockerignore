@@ -1,11 +1,5 @@
 node_modules
 npm-debug.log
-Dockerfile
-.dockerignore
+downloads
 .git
-.github
 .gitignore
-README.md
-LICENSE
-*.md
-docs
