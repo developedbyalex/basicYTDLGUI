@@ -12,7 +12,7 @@ A modern, user-friendly web interface for downloading videos and audio from vari
 
 [Features](#features) • [Installation](#installation) • [Usage](#usage) • [Docker](#docker) • [Contributing](#contributing)
 
-![App Screenshot](https://github.com/developedbyalex/basicYTDLGUI/raw/main/screenshots/app.png)
+![image](https://github.com/user-attachments/assets/4c173410-da6c-4c59-b5a6-35becd2611de)
 
 </div>
 
