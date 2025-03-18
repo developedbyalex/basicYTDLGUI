@@ -1,91 +1,139 @@
-![image](https://github.com/user-attachments/assets/dabb9495-431b-46c5-8bb1-c914668dbfd1)
+# basicYTDLGUI 🎥
 
-# basicYTDLGUI
+<div align="center">
 
-**basicYTDLGUI** is a lightweight and user-friendly web application for downloading videos and audio files from various online platforms. It supports downloading in both MP4 (video) and MP3 (audio) formats.
+[![GitHub stars](https://img.shields.io/github/stars/developedbyalex/basicYTDLGUI?style=for-the-badge)](https://github.com/developedbyalex/basicYTDLGUI/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/developedbyalex/basicYTDLGUI?style=for-the-badge)](https://github.com/developedbyalex/basicYTDLGUI/network)
+[![GitHub issues](https://img.shields.io/github/issues/developedbyalex/basicYTDLGUI?style=for-the-badge)](https://github.com/developedbyalex/basicYTDLGUI/issues)
+[![Docker Build](https://img.shields.io/github/actions/workflow/status/developedbyalex/basicYTDLGUI/docker-build.yml?style=for-the-badge&logo=docker)](https://github.com/developedbyalex/basicYTDLGUI/actions)
+[![License](https://img.shields.io/github/license/developedbyalex/basicYTDLGUI?style=for-the-badge)](https://github.com/developedbyalex/basicYTDLGUI/blob/main/LICENSE)
 
-## Features
+A modern, user-friendly web interface for downloading videos and audio from various platforms using yt-dlp.
 
-- Download videos as MP4 or audio as MP3.
-- Interactive progress bar to track download progress.
-- Clean and responsive UI using modern CSS.
-- Fully compatible with YouTube links and other popular media platforms.
+[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Docker](#docker) • [Contributing](#contributing)
 
-## Installation
+![App Screenshot](https://github.com/developedbyalex/basicYTDLGUI/raw/main/screenshots/app.png)
+
+</div>
+
+## ✨ Features
+
+- 🎯 **Simple Interface**: Clean, modern design with dark glass theme
+- 🎬 **Multiple Formats**: Download as MP4 (video) or MP3 (audio)
+- 📥 **Batch Downloads**: Process multiple URLs simultaneously
+- 📊 **Progress Tracking**: Real-time progress bars and status updates
+- 🎨 **Metadata Support**: Include video metadata, thumbnails, and comments
+- 🌐 **Platform Support**: Works with YouTube and many other platforms
+- 📱 **Responsive Design**: Fully functional on mobile devices
+- 🐳 **Docker Support**: Easy deployment with Docker
+
+## 🚀 Installation
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) installed on your machine.
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp) installed globally or accessible via PATH.
+- [Node.js](https://nodejs.org/) (v14 or higher)
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp)
+- [FFmpeg](https://ffmpeg.org/) (for audio conversion)
 
-### Steps
+### Quick Start
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/developedbyalex/basicYTDLGUI.git
-   cd basicYTDLGUI
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/developedbyalex/basicYTDLGUI.git
 
-2. Install dependencies:
-   ```bash
-   npm i
-   ```
+# Navigate to project directory
+cd basicYTDLGUI
 
-3. Run the server:
-   ```bash
-   node server.js
-   ```
+# Install dependencies
+npm install
 
-4. Open your browser and navigate to:
-   ```
-   http://localhost:3000
-   ```
-
-## Usage
-
-1. Enter the URL of the video or audio you want to download in the input field.
-2. Click on the "Download MP4" button for video or the "Download MP3" button for audio.
-3. Track the download progress via the progress bar.
-4. Once the download is complete, the file will automatically be served to your browser for saving.
-
-## File Structure
-
-```plaintext
-project-folder/
-├── public/
-│   ├── index.html         # Front-end HTML
-│   ├── style.css          # CSS for styling
-│   ├── script.js          # Client-side JavaScript
-├── server.js              # Backend server logic
-├── package.json           # Project dependencies
-└── README.md              # Project documentation
+# Start the server
+npm start
 ```
+
+Then open http://localhost:3000 in your browser.
+
+## 🐳 Docker
+
+### Using Docker Compose (Recommended)
+
+```bash
+# Build and start containers
+docker-compose up -d
+
+# Stop containers
+docker-compose down
+```
+
+### Manual Docker Build
+
+```bash
+# Build the image
+docker build -t basicytdlgui .
+
+# Run the container
+docker run -p 3000:3000 -v $(pwd)/downloads:/usr/src/app/downloads basicytdlgui
+```
+
+## 📖 Usage
+
+1. Enter one or more video URLs (one per line)
+2. Choose your preferred format (MP4/MP3)
+3. Configure download options:
+   - Use video's title as filename
+   - Include metadata (thumbnails, description)
+   - Include comments
+4. Click Download and monitor progress
+
+## 🔧 Configuration
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Server port | `3000` |
+| `DOWNLOAD_DIR` | Download directory | `./downloads` |
+
+### Instagram Support
+
+To download from Instagram:
+
+1. Install "[Get cookies.txt](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)" extension
+2. Log into Instagram
+3. Export cookies to `cookies.txt`
+4. Place in project root
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how you can help:
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to your branch
+5. Open a pull request
+
+Please ensure your PR adheres to the following:
+- Follow existing code style
+- Add tests if applicable
+- Update documentation as needed
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp) for the amazing downloader
+- [Express.js](https://expressjs.com/) for the web framework
+- All our [contributors](https://github.com/developedbyalex/basicYTDLGUI/graphs/contributors)
+
 ---
-## Instagram Support
 
-To download from Instagram, you'll need to provide authentication:
+<div align="center">
 
-1. Install a browser extension like "[Get cookies.txt](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc?hl=en)"
-2. Log into Instagram in your browser
-3. Use the extension to export your cookies
-4. Save the exported file as `cookies.txt` in the project root directory
----
-## Technology Stack
+Made with ❤️ by [developedbyalex](https://github.com/developedbyalex)
 
-- **Frontend**: HTML5, CSS3, JavaScript (Vanilla JS)
-- **Backend**: Node.js, Express.js
-- **Download Tool**: yt-dlp
----
-### To-Do List
+⭐ Star us on GitHub — it motivates us a lot!
 
-- [ ] Get Docker working
-- [ ] Add option to download multiple links at once
----
-
-### Contributing
-
-Contributions are welcome! Feel free to fork this project, improve it, and submit a pull request.
-
-## Please note
-
-This project is meant to be hosted locally, this is not for production use at all.
+</div>
