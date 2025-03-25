@@ -1,3 +1,95 @@
+// Settings functionality
+const settingsBtn = document.getElementById('settings-btn');
+const settingsModal = document.getElementById('settings-modal');
+const closeSettings = document.getElementById('close-settings');
+const saveSettings = document.getElementById('save-settings');
+const settingsForm = document.getElementById('settings-form');
+
+// Load settings when the page loads
+async function loadSettings() {
+    try {
+        const response = await fetch('/api/settings');
+        const settings = await response.json();
+        
+        // Update form values
+        document.getElementById('logging-enabled').checked = settings.logging.enabled;
+        document.getElementById('log-level').value = settings.logging.level;
+        document.getElementById('log-file').value = settings.logging.file;
+        document.getElementById('max-log-size').value = Math.floor(settings.logging.rotation.maxSize / 1024 / 1024);
+        document.getElementById('max-log-files').value = settings.logging.rotation.maxFiles;
+        document.getElementById('download-dir').value = settings.storage.downloadDir;
+        document.getElementById('theme').value = settings.ui.theme;
+
+        // Apply theme
+        document.documentElement.setAttribute('data-theme', settings.ui.theme);
+    } catch (error) {
+        console.error('Error loading settings:', error);
+    }
+}
+
+// Save settings
+async function saveSettingsToServer() {
+    const settings = {
+        logging: {
+            enabled: document.getElementById('logging-enabled').checked,
+            level: document.getElementById('log-level').value,
+            file: document.getElementById('log-file').value,
+            rotation: {
+                maxSize: document.getElementById('max-log-size').value * 1024 * 1024,
+                maxFiles: parseInt(document.getElementById('max-log-files').value)
+            }
+        },
+        storage: {
+            downloadDir: document.getElementById('download-dir').value
+        },
+        ui: {
+            theme: document.getElementById('theme').value
+        }
+    };
+
+    try {
+        const response = await fetch('/api/settings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(settings)
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            // Apply theme immediately
+            document.documentElement.setAttribute('data-theme', settings.ui.theme);
+            settingsModal.style.display = 'none';
+        } else {
+            throw new Error('Failed to save settings');
+        }
+    } catch (error) {
+        console.error('Error saving settings:', error);
+        alert('Failed to save settings. Please try again.');
+    }
+}
+
+// Event listeners for settings modal
+settingsBtn.addEventListener('click', () => {
+    settingsModal.style.display = 'flex';
+});
+
+closeSettings.addEventListener('click', () => {
+    settingsModal.style.display = 'none';
+});
+
+settingsModal.addEventListener('click', (e) => {
+    if (e.target === settingsModal) {
+        settingsModal.style.display = 'none';
+    }
+});
+
+saveSettings.addEventListener('click', saveSettingsToServer);
+
+// Load settings when the page loads
+document.addEventListener('DOMContentLoaded', loadSettings);
+
 document.getElementById('use-default-name').addEventListener('change', (e) => {
     const customNameInput = document.getElementById('custom-name');
     customNameInput.disabled = e.target.checked;

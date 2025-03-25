@@ -2,24 +2,61 @@ const express = require("express");
 const { spawn } = require("child_process");
 const path = require("path");
 const fs = require("fs");
+const { logger } = require('./utils/logger');
+const settings = require('./utils/settings');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+
+// API endpoint for settings
+app.get('/api/settings', (req, res) => {
+    res.json(settings.getSettings());
+});
+
+app.post('/api/settings', (req, res) => {
+    const { logging, storage, ui } = req.body;
+
+    try {
+        // Update logging settings
+        if (logging) {
+            if (logging.enabled !== undefined) settings.setLoggingEnabled(logging.enabled);
+            if (logging.level) settings.setLogLevel(logging.level);
+            if (logging.file) settings.setLogFile(logging.file);
+            if (logging.rotation) settings.setLogRotation(logging.rotation.maxSize, logging.rotation.maxFiles);
+        }
+
+        // Update storage settings
+        if (storage && storage.downloadDir) {
+            settings.setDownloadDirectory(storage.downloadDir);
+        }
+
+        // Update UI settings
+        if (ui && ui.theme) {
+            settings.setTheme(ui.theme);
+        }
+
+        res.json({ success: true, settings: settings.getSettings() });
+    } catch (error) {
+        logger.error('Error updating settings:', error);
+        res.status(500).json({ error: 'Failed to update settings' });
+    }
+});
 
 app.post("/download", (req, res) => {
     const { url: videoUrl, useDefaultName, includeMetadata, includeComments, customName, format } = req.body;
 
     if (!videoUrl) {
+        logger.error('No URL provided');
         return res.status(400).json({ error: "No URL provided" });
     }
 
     // Create a downloads directory if it doesn't exist
-    const downloadsDir = path.join(__dirname, 'downloads');
+    const downloadsDir = settings.getSettings().storage.downloadDir;
     if (!fs.existsSync(downloadsDir)) {
-        fs.mkdirSync(downloadsDir);
+        fs.mkdirSync(downloadsDir, { recursive: true });
     }
 
     // Set format-specific arguments
@@ -81,11 +118,13 @@ app.post("/download", (req, res) => {
     args.push('-o', outputPath);
     args.push(videoUrl);
 
+    logger.info('Starting download', { videoUrl, format, outputPath });
+
     const ytDlp = spawn('yt-dlp', args);
 
     ytDlp.stdout.on('data', (data) => {
         const output = data.toString();
-        console.log('yt-dlp output:', output);
+        logger.debug('yt-dlp output:', output);
 
         const progressMatch = output.match(/(\d+\.?\d*)%/);
         if (progressMatch) {
@@ -95,29 +134,32 @@ app.post("/download", (req, res) => {
     });
 
     ytDlp.stderr.on('data', (data) => {
-        console.error('yt-dlp error:', data.toString());
+        const error = data.toString();
+        logger.error('yt-dlp error:', error);
     });
 
     ytDlp.on('close', (code) => {
         if (code === 0) {
+            logger.info('Download completed successfully', { videoUrl, outputPath });
             res.write(JSON.stringify({ 
                 status: 'complete', 
                 message: 'Download complete!'
             }));
             res.end();
         } else {
+            logger.error('Download failed', { videoUrl, code });
             res.write(JSON.stringify({ error: 'Download failed' }));
             res.end();
         }
     });
 
     ytDlp.on('error', (error) => {
-        console.error('Spawn error:', error);
+        logger.error('Spawn error:', error);
         res.write(JSON.stringify({ error: error.message }));
         res.end();
     });
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+    logger.info(`Server running at http://localhost:${PORT}`);
 });

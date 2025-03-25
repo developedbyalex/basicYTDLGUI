@@ -9,50 +9,159 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Video Downloader</h1>
-        <form id="download-form" aria-label="Video download form">
-            <input 
-                type="url" 
-                id="video-url" 
-                placeholder="Enter video URL" 
-                required 
-                aria-label="Video URL input"
-            />
-            <div class="options-container">
-                <div class="option">
-                    <input type="checkbox" id="use-default-name" name="use-default-name">
-                    <label for="use-default-name">Use video's original title</label>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">
+                <h1>Video Downloader</h1>
+                <button id="settings-btn" class="settings-button" aria-label="Open settings">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/>
+                        <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="download-card">
+                <form id="download-form" aria-label="Video download form">
+                    <div class="url-input-section">
+                        <h2>Enter Video URL</h2>
+                        <textarea 
+                            id="video-url" 
+                            placeholder="Enter video URL (one per line for multiple videos)" 
+                            required 
+                            aria-label="Video URL input"
+                        ></textarea>
+                        <p class="url-hint">Supports YouTube, Vimeo, and many other platforms</p>
+                    </div>
+
+                    <div class="options-grid">
+                        <div class="options-section">
+                            <h3>Download Options</h3>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="use-default-name" name="use-default-name">
+                                <label for="use-default-name" class="checkbox-label">Use video's original title</label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="include-metadata" name="include-metadata" checked>
+                                <label for="include-metadata" class="checkbox-label">Include metadata</label>
+                            </div>
+                            <div class="checkbox-wrapper">
+                                <input type="checkbox" id="include-comments" name="include-comments">
+                                <label for="include-comments" class="checkbox-label">Include comments</label>
+                            </div>
+                        </div>
+
+                        <div class="options-section">
+                            <h3>Format Options</h3>
+                            <select id="format-select" name="format" class="format-select">
+                                <option value="mp4">MP4 (Video)</option>
+                                <option value="mp3">MP3 (Audio only)</option>
+                            </select>
+                            <div class="name-options">
+                                <input 
+                                    type="text" 
+                                    id="custom-name" 
+                                    class="custom-name-input" 
+                                    placeholder="Custom filename (optional)" 
+                                    disabled
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-section">
+                        <button type="submit" class="download-button">
+                            <svg class="download-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                            </svg>
+                            Download
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="progress-container" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
                 </div>
-                <div class="option">
-                    <input type="checkbox" id="include-metadata" name="include-metadata" checked>
-                    <label for="include-metadata">Include metadata (thumbnails, description, chapters)</label>
+                <div class="progress-text">0%</div>
+            </div>
+            <p id="status-message" aria-live="polite"></p>
+        </main>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Settings</h2>
+                    <button class="close-button" id="close-settings">&times;</button>
                 </div>
-                <div class="option">
-                    <input type="checkbox" id="include-comments" name="include-comments">
-                    <label for="include-comments">Include comments</label>
+                <div class="modal-body">
+                    <form id="settings-form">
+                        <!-- Logging Settings -->
+                        <div class="settings-section">
+                            <h3>Logging Settings</h3>
+                            <div class="setting-item">
+                                <label class="switch">
+                                    <input type="checkbox" id="logging-enabled">
+                                    <span class="slider"></span>
+                                </label>
+                                <label for="logging-enabled">Enable Logging</label>
+                            </div>
+                            <div class="setting-item">
+                                <label for="log-level">Log Level</label>
+                                <select id="log-level" class="setting-select">
+                                    <option value="error">Error</option>
+                                    <option value="warn">Warning</option>
+                                    <option value="info">Info</option>
+                                    <option value="debug">Debug</option>
+                                </select>
+                            </div>
+                            <div class="setting-item">
+                                <label for="log-file">Log File Name</label>
+                                <input type="text" id="log-file" class="setting-input" placeholder="app.log">
+                            </div>
+                            <div class="setting-item">
+                                <label for="max-log-size">Max Log Size (MB)</label>
+                                <input type="number" id="max-log-size" class="setting-input" min="1" max="100" value="5">
+                            </div>
+                            <div class="setting-item">
+                                <label for="max-log-files">Max Log Files</label>
+                                <input type="number" id="max-log-files" class="setting-input" min="1" max="20" value="5">
+                            </div>
+                        </div>
+
+                        <!-- Storage Settings -->
+                        <div class="settings-section">
+                            <h3>Storage Settings</h3>
+                            <div class="setting-item">
+                                <label for="download-dir">Download Directory</label>
+                                <input type="text" id="download-dir" class="setting-input" placeholder="downloads">
+                            </div>
+                        </div>
+
+                        <!-- UI Settings -->
+                        <div class="settings-section">
+                            <h3>UI Settings</h3>
+                            <div class="setting-item">
+                                <label for="theme">Theme</label>
+                                <select id="theme" class="setting-select">
+                                    <option value="dark">Dark</option>
+                                    <option value="light">Light</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="option format-selection">
-                    <label>Format:</label>
-                    <select id="format-select" name="format">
-                        <option value="mp4">MP4 (Video)</option>
-                        <option value="mp3">MP3 (Audio only)</option>
-                    </select>
-                </div>
-                <div class="custom-name-container">
-                    <input type="text" id="custom-name" placeholder="Custom filename (optional)" disabled>
+                <div class="modal-footer">
+                    <button id="save-settings" class="primary-button">Save Settings</button>
                 </div>
             </div>
-            <button type="submit" aria-label="Download video">Download</button>
-        </form>
-        <div class="progress-container" style="display: none;">
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
-            </div>
-            <div class="progress-text">0%</div>
         </div>
-        <p id="status-message" aria-live="polite"></p>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>

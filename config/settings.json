@@ -1,0 +1,17 @@
+{
+  "logging": {
+    "enabled": true,
+    "level": "info",
+    "file": "app.log",
+    "rotation": {
+      "maxSize": 5242880,
+      "maxFiles": 5
+    }
+  },
+  "storage": {
+    "downloadDir": "STORAGE_HERE"
+  },
+  "ui": {
+    "theme": "dark"
+  }
+}
