@@ -55,11 +55,44 @@ Then open http://localhost:3000 in your browser.
 
 ## 🐳 Docker
 
+### Using Official Image
+
+```bash
+# Pull the official image
+docker pull ghcr.io/developedbyalex/basicytdlgui:latest
+
+# Run the container
+docker run -d \
+  --name basicytdlgui \
+  -p 3000:3000 \
+  -v $(pwd)/downloads:/usr/src/app/downloads \
+  ghcr.io/developedbyalex/basicytdlgui:latest
+```
+
 ### Using Docker Compose (Recommended)
+
+Create a `docker-compose.yml` file:
+
+```yaml
+version: '3.8'
+services:
+  app:
+    image: ghcr.io/developedbyalex/basicytdlgui:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./downloads:/usr/src/app/downloads
+    restart: unless-stopped
+```
+
+Then run:
 
 ```bash
 # Build and start containers
 docker-compose up -d
+
+# View logs
+docker-compose logs -f
 
 # Stop containers
 docker-compose down
@@ -67,13 +100,28 @@ docker-compose down
 
 ### Manual Docker Build
 
+Build from source if you want to customize the image:
+
 ```bash
 # Build the image
 docker build -t basicytdlgui .
 
 # Run the container
-docker run -p 3000:3000 -v $(pwd)/downloads:/usr/src/app/downloads basicytdlgui
+docker run -d \
+  --name basicytdlgui \
+  -p 3000:3000 \
+  -v $(pwd)/downloads:/usr/src/app/downloads \
+  basicytdlgui
 ```
+
+### Docker Tips
+
+- The downloads directory is persisted through a volume mount
+- Access the web interface at http://localhost:3000
+- Use `docker logs -f basicytdlgui` to view real-time logs
+- Use `docker stats basicytdlgui` to monitor container resources
+- Set custom port: `-p 8080:3000` (access on port 8080)
+- Set custom download directory: `-v /path/to/downloads:/usr/src/app/downloads`
 
 ## 📖 Usage
 
