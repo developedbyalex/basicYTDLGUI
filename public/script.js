@@ -12,7 +12,7 @@ async function loadSettings() {
         const settings = await response.json();
         
         // Update form values
-        document.getElementById('logging-enabled').checked = settings.logging.enabled;
+        document.getElementById('logging-enabled').value = settings.logging.enabled.toString();
         document.getElementById('log-level').value = settings.logging.level;
         document.getElementById('log-file').value = settings.logging.file;
         document.getElementById('max-log-size').value = Math.floor(settings.logging.rotation.maxSize / 1024 / 1024);
@@ -31,7 +31,7 @@ async function loadSettings() {
 async function saveSettingsToServer() {
     const settings = {
         logging: {
-            enabled: document.getElementById('logging-enabled').checked,
+            enabled: document.getElementById('logging-enabled').value === 'true',
             level: document.getElementById('log-level').value,
             file: document.getElementById('log-file').value,
             rotation: {
@@ -93,6 +93,22 @@ document.addEventListener('DOMContentLoaded', loadSettings);
 document.getElementById('use-default-name').addEventListener('change', (e) => {
     const customNameInput = document.getElementById('custom-name');
     customNameInput.disabled = e.target.checked;
+});
+
+// Add event listener for the "Use video's original title" checkbox
+document.getElementById("use-default-name").addEventListener("change", function() {
+    const customNameInput = document.getElementById("custom-name");
+    customNameInput.disabled = this.checked;
+    if (!this.checked) {
+        customNameInput.focus();
+    }
+});
+
+// Initialize the custom name input state
+document.addEventListener("DOMContentLoaded", function() {
+    const useDefaultName = document.getElementById("use-default-name");
+    const customNameInput = document.getElementById("custom-name");
+    customNameInput.disabled = useDefaultName.checked;
 });
 
 document.getElementById("download-form").addEventListener("submit", async (e) => {
