@@ -3,7 +3,7 @@ FROM node:18
 # Add standard Docker labels
 LABEL org.opencontainers.image.title="BasicYTDLGUI"
 LABEL org.opencontainers.image.description="A simple GUI for yt-dlp with playlist support and quality presets"
-LABEL org.opencontainers.image.source="https://github.com/alexp/basicYTDLGUI"
+LABEL org.opencontainers.image.source="https://github.com/developedbyalex/basicYTDLGUI"
 LABEL org.opencontainers.image.licenses="MIT"
 
 # Install yt-dlp and its dependencies
