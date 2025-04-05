@@ -14,6 +14,14 @@ const defaultSettings = {
     storage: {
         downloadDir: path.join(__dirname, '..', 'downloads')
     },
+    ytdlp: {
+        version: 'stable',
+        autoUpdate: true,
+        binaryPath: {
+            stable: 'yt-dlp',
+            nightly: path.join(__dirname, '..', 'bin', 'yt-dlp-nightly')
+        }
+    },
     ui: {
         theme: 'dark'
     }
@@ -23,6 +31,14 @@ class Settings {
     constructor() {
         this.settingsPath = path.join(__dirname, '..', 'config', 'settings.json');
         this.settings = this.loadSettings();
+        this.ensureBinaryDirectory();
+    }
+
+    ensureBinaryDirectory() {
+        const binDir = path.join(__dirname, '..', 'bin');
+        if (!fs.existsSync(binDir)) {
+            fs.mkdirSync(binDir, { recursive: true });
+        }
     }
 
     loadSettings() {
@@ -87,6 +103,21 @@ class Settings {
     setTheme(theme) {
         this.settings.ui.theme = theme;
         this.saveSettings();
+    }
+
+    // YT-DLP settings
+    setYtdlpVersion(version) {
+        this.settings.ytdlp.version = version;
+        this.saveSettings();
+    }
+
+    setYtdlpAutoUpdate(enabled) {
+        this.settings.ytdlp.autoUpdate = enabled;
+        this.saveSettings();
+    }
+
+    getYtdlpPath() {
+        return this.settings.ytdlp.binaryPath[this.settings.ytdlp.version];
     }
 
     // Get all settings

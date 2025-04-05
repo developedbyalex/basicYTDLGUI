@@ -4,12 +4,18 @@ const path = require("path");
 const fs = require("fs");
 const { logger } = require('./utils/logger');
 const settings = require('./utils/settings');
+const ytdlpManager = require('./utils/ytdlp-manager');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
+
+// Initialize yt-dlp manager
+ytdlpManager.initialize().catch(error => {
+    logger.error('Failed to initialize yt-dlp manager:', error);
+});
 
 // API endpoint for settings
 app.get('/api/settings', (req, res) => {
@@ -120,7 +126,7 @@ app.post("/download", (req, res) => {
 
     logger.info('Starting download', { videoUrl, format, outputPath });
 
-    const ytDlp = spawn('yt-dlp', args);
+    const ytDlp = spawn(ytdlpManager.getBinaryPath(), args);
 
     ytDlp.stdout.on('data', (data) => {
         const output = data.toString();

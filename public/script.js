@@ -18,6 +18,8 @@ async function loadSettings() {
         document.getElementById('max-log-size').value = Math.floor(settings.logging.rotation.maxSize / 1024 / 1024);
         document.getElementById('max-log-files').value = settings.logging.rotation.maxFiles;
         document.getElementById('download-dir').value = settings.storage.downloadDir;
+        document.getElementById('ytdlp-version').value = settings.ytdlp.version;
+        document.getElementById('ytdlp-auto-update').value = settings.ytdlp.autoUpdate.toString();
         document.getElementById('theme').value = settings.ui.theme;
 
         // Apply theme
@@ -41,6 +43,10 @@ async function saveSettingsToServer() {
         },
         storage: {
             downloadDir: document.getElementById('download-dir').value
+        },
+        ytdlp: {
+            version: document.getElementById('ytdlp-version').value,
+            autoUpdate: document.getElementById('ytdlp-auto-update').value === 'true'
         },
         ui: {
             theme: document.getElementById('theme').value
